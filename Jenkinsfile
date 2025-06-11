@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-    docker {
-        image 'maven:3.9.6-eclipse-temurin-17'
-    }
-}
+    agent any
 
     parameters {
         string(name: 'REPO_URL', defaultValue: 'https://github.com/m1587/JenkinsPipelinesProject', description: 'GitHub repository URL')
