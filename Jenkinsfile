@@ -12,24 +12,26 @@ pipeline {
 
     stages {
 
-    stage('Checkout Code') {
-                steps {
+        stage('Checkout Code') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
                     script {
                         echo "Starting checkout stage"
 
                         if (params.NAME_BRANCH == env.MAIN_BRANCH) {
-                         echo "Checking out from MAIN branch using scm"
+                            echo "Checking out from MAIN branch using scm"
                             checkout scm
                         } else {
-                          echo "Checking out from custom branch: ${params.NAME_BRANCH}"
-                                          git branch: "${params.NAME_BRANCH}", url: "${params.REPO_URL}"
+                            echo "Checking out from custom branch: ${params.NAME_BRANCH}"
+                            git branch: "${params.NAME_BRANCH}", url: "${params.REPO_URL}"
                         }
 
                         echo "Checkout stage completed successfully"
                     }
                 }
-                timeout(time: 5, unit: 'MINUTES')
             }
+        }
+
         stage('Compile') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
@@ -61,7 +63,6 @@ pipeline {
     }
 
     triggers {
-        cron('30 5 * * 1')  // Mondays at 05:30
-        cron('0 14 * * *')  // Every day at 14:00
+        cron('30 5 * * 1\n0 14 * * *')  // Mondays at 05:30 and every day at 14:00
     }
 }
